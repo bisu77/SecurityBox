@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allin.web.dao.IFDao">
+
+							<!-- select -->
+
+	<select id="bId_max" resultType="java.lang.Integer">
+		SELECT MAX(BID) FROM MVC_BOARD;
+	</select>
+
+	<select id="file_select" resultType="com.allin.web.dto.FDto">
+		SELECT * FROM FILE_BOARD WHERE BID = #{PARAM1};
+	</select>
+	
+	<select id="get_original_name" resultType="java.lang.String">
+		SELECT ORIGINAL_FILE_NAME FROM FILE_BOARD WHERE STORED_FILE_NAME = #{PARAM1};
+	</select>
+	
+	<select id="get_date" resultType="java.lang.String">
+		SELECT DATE FROM FILE_BOARD WHERE BID = #{PARAM1};
+	</select>
+	
+							<!-- insert -->
+							
+	<insert id="file_write">
+		INSERT INTO FILE_BOARD (BID,ORIGINAL_FILE_NAME, STORED_FILE_NAME, FILE_SIZE, DATE) VALUES (#{param1},#{param2},#{param3},#{param4},#{param5})
+	</insert>
+	
+	
+								<!-- insert -->
+	<delete id="delete_file">
+		DELETE FROM FILE_BOARD WHERE BID = #{PARAM1};
+	</delete>
+</mapper>

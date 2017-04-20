@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allin.web.dao.HistoryDAO">
+            <!-- 꼭 써줘야 할 거  -->
+            
+            
+            
+                     <!-- select -->
+   
+   <!-- id는 IBDao.java에서 적어준 함수명 #{param1}은 함수 매개변수, returnType은 말그대로 sql 리턴 값 -->
+   
+   <select id="historySelect" resultType="com.allin.web.dto.HistoryDTO">
+      SELECT * FROM HISTORY WHERE ID = #{param1} ORDER BY ENROLL_TIME
+   </select>
+   
+   <select id="BoxSelect" resultType="String">
+      SELECT BOX_CODE FROM MEMBER WHERE ID = #{param1} 
+   </select>
+  
+   
+                     <!-- insert -->
+   
+   <insert id="historyInsert">
+      INSERT INTO HISTORY (COMPANY,TRANS_NUM,ID,BOX_CODE) VALUES(#{param1},#{param2},#{param3},#{param4})
+   </insert>
+   
+   
+                     <!-- update -->
+   
+   <update id="historyUpdate">
+      UPDATE HISTORY SET ARRIVE_TIME = #{param3} WHERE TRANS_NUM = #{param1} AND ID = #{param2}
+   </update>
+   
+   
+   
+                     <!-- delete -->
+
+   <delete id="historyDelete">
+      DELETE FROM HISTORY WHERE ID = #{param2} AND TRANS_NUM = #{param1} 
+   </delete>
+   
+   
+</mapper>

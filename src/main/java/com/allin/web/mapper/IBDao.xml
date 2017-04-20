@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allin.web.dao.IBDao">
+				<!-- 꼭 써줘야 할 거  -->
+				
+				
+				
+							<!-- select -->
+	
+	<!-- id는 IBDao.java에서 적어준 함수명 #{param1}은 함수 매개변수, returnType은 말그대로 sql 리턴 값 -->
+	
+	<select id="list" resultType="com.allin.web.dto.BDto">
+		SELECT * FROM MVC_BOARD ORDER BY BGROUP DESC, BSTEP ASC
+	</select>
+	
+	<select id="getCurrval" resultType="java.lang.Integer">
+		SELECT IFNULL(MAX(BID),0)+1 FROM MVC_BOARD 
+	</select>
+	
+	<select id="contentView" resultType="com.allin.web.dto.BDto">
+		SELECT * FROM MVC_BOARD WHERE BID = #{PARAM1}
+	</select>
+	
+	<select id="reply_view" resultType="com.allin.web.dto.BDto">
+		SELECT * FROM MVC_BOARD WHERE BID = #{PARAM1}
+	</select>
+	
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM MVC_BOARD
+	</select>
+	
+	<select id="listPage" resultType="com.allin.web.dto.BDto">
+		SELECT * FROM MVC_BOARD ORDER BY BGROUP DESC, BSTEP ASC LIMIT #{param1},10
+	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and bTitle like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and bContent like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and bName like CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( bTitle like CONCAT('%', #{keyword}, '%') OR bContent
+				like
+				CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( bContent like CONCAT('%', #{keyword}, '%') OR bName
+				like
+				CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				and ( bTitle like CONCAT('%', #{keyword}, '%')
+				OR
+				bContent
+				like CONCAT('%', #{keyword}, '%')
+				OR
+				bName like CONCAT('%',
+				#{keyword}, '%'))
+			</if>
+		</if>
+	</sql>
+
+
+
+	<select id="listSearch" resultType="com.allin.web.dto.BDto">
+		<![CDATA[  
+		  SELECT * 
+		  FROM MVC_BOARD 
+		  WHERE BID > 0 
+		]]>
+
+		<include refid="search"></include>
+  
+		<![CDATA[    
+		  ORDER BY BGROUP DESC, BSTEP ASC
+		  LIMIT #{pageStart}, #{perPageNum}
+		]]>
+	</select>
+
+
+
+	<select id="listSearchCount" resultType="int">
+		<![CDATA[  
+		  SELECT COUNT(*) 
+		  FROM MVC_BOARD 
+		  WHERE BID > 0 
+		]]>
+		<include refid="search"></include>
+
+	</select>
+
+	
+	
+	
+							<!-- insert -->
+	
+	<insert id="write">
+		INSERT INTO MVC_BOARD(BNAME,BTITLE,BCONTENT,BHIT,BGROUP,BSTEP,BINDENT,BFILE) VALUES(#{param1},#{param2},#{param3},0,#{param4},0,0,#{param5})
+	</insert>
+	
+	<insert id="reply">
+		INSERT INTO MVC_BOARD (BNAME, BTITLE, BCONTENT, BGROUP, BSTEP, BINDENT,BFILE) VALUES (#{param1},#{param2},#{param3},#{param4},#{param5}+1,#{param6}+1,#{param7})
+	</insert>
+	
+							<!-- update -->
+	
+	<update id="upHit">
+		UPDATE MVC_BOARD SET BHIT = BHIT + 1 WHERE BID = #{param1}
+	</update>
+	
+	<update id="modify">
+		UPDATE MVC_BOARD SET BNAME = #{param1}, BTITLE = #{param2}, BCONTENT = #{param3}, BFILE = #{param5} WHERE BID = #{param4}
+	</update>
+	
+	<update id="replyShape">
+		UPDATE MVC_BOARD SET BSTEP = BSTEP + 1 WHERE BGROUP = #{param1} AND BSTEP > #{param2}
+	</update>
+	
+	
+							<!-- delete -->
+
+	<delete id="delete">
+		DELETE FROM MVC_BOARD WHERE BID = #{param1}
+	</delete>
+	
+	
+</mapper>

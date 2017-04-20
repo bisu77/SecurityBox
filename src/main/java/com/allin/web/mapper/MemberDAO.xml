@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.allin.web.dao.MemberDAO">
+            <!-- 꼭 써줘야 할 거  -->
+            
+            
+            
+                     <!-- select -->
+   
+   <!-- id는 IBDao.java에서 적어준 함수명 #{param1}은 함수 매개변수, returnType은 말그대로 sql 리턴 값 -->
+   
+   <select id="memberSelect" resultType="com.allin.web.dto.MemberDTO">
+      SELECT * FROM MEMBER
+   </select>
+   
+   <select id="one_memberSelect" resultType="com.allin.web.dto.MemberDTO">
+      SELECT * FROM MEMBER WHERE ID = #{param1}
+   </select>
+   
+   <select id="find_id" resultType="com.allin.web.dto.MemberDTO">
+      SELECT * FROM MEMBER WHERE NAME = #{param1} AND BOX_CODE = #{param2}
+   </select>
+   
+    <select id="find_pw" resultType="com.allin.web.dto.MemberDTO">
+      SELECT * FROM MEMBER WHERE ID = #{param1} AND NAME = #{param2} AND BOX_CODE = #{param3} 
+   </select>
+  
+   
+                     <!-- insert -->
+   
+   <insert id="memberInsert" >
+      INSERT INTO MEMBER (ID,PASSWORD,NAME,JOIN_DATE,BOX_CODE,ADDRESS,ZIPCODE)VALUES(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+   </insert>
+   
+   
+                     <!-- update -->
+   
+   <update id="openDoor">
+      UPDATE MEMBER SET DOOR_STATE = 1 WHERE ID = #{param1}
+   </update>
+   
+   <update id="modify_pw">
+      UPDATE MEMBER SET PASSWORD = #{param2} WHERE ID = #{param1}
+   </update>
+   
+   
+   
+                   
+</mapper>
